@@ -69,7 +69,7 @@ public class SwaggerFoxConfig implements WebMvcConfigurer {
 
                 .select()
 
-                .apis(RequestHandlerSelectors.basePackage("com.bridgelabz.fundoonoteservice"))
+                .apis(RequestHandlerSelectors.basePackage("com.bridgelabz.note"))
 
                 .paths(PathSelectors.any())
 

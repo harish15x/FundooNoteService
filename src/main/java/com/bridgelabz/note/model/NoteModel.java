@@ -16,12 +16,12 @@ public class NoteModel {
     private Long id;
     private String title;
     private String description;
+    private String color;
+    private String emailid;
     private long userId;
+    private boolean pin;
     private boolean trash;
     private boolean isArchieve;
-    private boolean pin;
-    private String emailid;
-    private String color;
     private LocalDateTime registerDate;
     private LocalDateTime updateDate;
     private LocalDateTime remindertime;
@@ -30,16 +30,8 @@ public class NoteModel {
 
         this.title = noteDTO.getTitle();
         this.description = noteDTO.getDescription();
-        this.userId = noteDTO.getUserId();
-        this.trash = noteDTO.isTrash();
-        this.isArchieve = noteDTO.isArchieve();
-        this.pin = noteDTO.isPin();
         this.emailid = noteDTO.getEmailid();
         this.color = noteDTO.getColor();
-        this.registerDate = noteDTO.getRegisterDate();
-        this.registerDate = LocalDateTime.now();
-        this.updateDate = LocalDateTime.now();
-        this.registerDate = LocalDateTime.now();
 
     }
 
