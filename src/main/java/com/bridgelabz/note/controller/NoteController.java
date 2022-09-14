@@ -20,18 +20,18 @@ public class NoteController {
     INoteService noteService;
 
     @PostMapping("/addnote")
-    public ResponseEntity<ResponseClass> addNote(@RequestHeader String token, @Valid @PathVariable NoteDTO noteDTO) {
-        ResponseClass responseClass = noteService.addNote(token, noteDTO);
+    public ResponseEntity<ResponseClass> addNote(@RequestBody NoteDTO noteDTO) {
+        ResponseClass responseClass = noteService.addNote(noteDTO);
         return new ResponseEntity<>(responseClass, HttpStatus.OK);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<ResponseClass> updateNote(@RequestHeader String token, @Valid @PathVariable NoteDTO noteDTO, @PathVariable Long noteId) {
+    public ResponseEntity<ResponseClass> updateNote(@RequestHeader String token, @PathVariable NoteDTO noteDTO, @PathVariable Long noteId) {
         ResponseClass responseClass = noteService.updateNote(token, noteDTO, noteId);
         return new ResponseEntity<>(responseClass, HttpStatus.OK);
     }
 
-    @GetMapping("/getnote")
+    @GetMapping("/getnotedata")
     public ResponseEntity<List<?>> getNoteData(@RequestHeader String token) {
         List<NoteModel> responseClass = noteService.getNoteData(token);
         return new ResponseEntity<>(responseClass, HttpStatus.OK);

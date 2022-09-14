@@ -31,9 +31,7 @@ public class NoteService implements INoteService {
     RestTemplate restTemplate;
 
     @Override
-    public ResponseClass addNote(String token, NoteDTO noteDTO) {
-        boolean isNote = restTemplate.getForObject("http://localhost:8091/note/validate/" + token, Boolean.class );
-        if (isNote){
+    public ResponseClass addNote(NoteDTO noteDTO) {
              NoteModel noteModel = new NoteModel(noteDTO);
              noteModel.setRegisterDate(LocalDateTime.now());
              noteRepository.save(noteModel);
@@ -42,8 +40,7 @@ public class NoteService implements INoteService {
              mailService.send(noteModel.getEmailid(), body, subject);
              return new ResponseClass(200, " Successfully ", noteModel);
         }
-        throw new NoteNotFoundException(400, "token is wrong");
-    }
+
 
     @Override
     public ResponseClass updateNote(String token, NoteDTO noteDTO, Long noteId) {

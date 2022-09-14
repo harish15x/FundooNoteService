@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface INoteService {
 
-    ResponseClass addNote(String token, NoteDTO noteDTO);
+    ResponseClass addNote(NoteDTO noteDTO);
 
     ResponseClass updateNote(String token, NoteDTO noteDTO, Long notId);
 
