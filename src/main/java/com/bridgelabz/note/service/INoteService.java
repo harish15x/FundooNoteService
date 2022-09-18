@@ -25,4 +25,8 @@ public interface INoteService {
     ResponseClass pin(long noteId, String token);
 
     ResponseClass archiveNote(long noteId, String token);
+
+    ResponseClass addCollabrator(Long noteId, String emailId, String collabrators, String token, Long collabratorUserId);
+
+    NoteModel setRemainder(String remainderTime, String token, Long id);
 }

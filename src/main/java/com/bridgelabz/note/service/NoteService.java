@@ -11,7 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -163,6 +166,65 @@ public class NoteService implements INoteService {
         }
         throw new NoteNotFoundException(400, "Token is wrong");
     }
+
+    @Override
+    public ResponseClass addCollabrator(Long noteId, String emailId, String collabrators, String token, Long collabratorUserId) {
+        boolean isNotePresent = restTemplate.getForObject("http://USER-SERVICE:8091/user/validateEmail/" + emailId, Boolean.class);
+        if (isNotePresent) {
+            Long userId = tokenUtil.decodeToken(token);
+            Optional<NoteModel> isIdPresent = noteRepository.findById(userId);
+            if (isIdPresent.isPresent()) {
+                Object isEmailPresent = restTemplate.getForObject("http://USER-SERVICE:8091/user/validateEmail/" + emailId, Object.class);
+                if (isEmailPresent.equals(null)) {
+                    Optional<NoteModel> isNoteAvailable = noteRepository.findById(noteId);
+                    if (isNoteAvailable.isPresent()) {
+                        List<String> collabList = new ArrayList<>();
+                        Object isEmailIdPresent = restTemplate.getForObject("http://USER-SERVICE:8091/user/validateEmail/" + emailId, Object.class);
+                        if (!isEmailIdPresent.equals(null)) {
+                            collabList.add(collabrators);
+                        } else {
+                            throw new NoteNotFoundException(400, "Email does not present");
+                        }
+                        isNoteAvailable.get().setCollabrators(collabList);
+                        noteRepository.save(isNoteAvailable.get());
+                        List<String> list = new ArrayList<>();
+                        list.add(isNoteAvailable.get().getEmailid());
+
+                        NoteModel noteModel = new NoteModel();
+                        noteModel.setTitle(isNoteAvailable.get().getTitle());
+                        noteModel.setUserId(isNoteAvailable.get().getUserId());
+                        noteModel.setDescription(isNoteAvailable.get().getDescription());
+                        noteRepository.save(noteModel);
+                        return new ResponseClass(200, "success", isNoteAvailable.get());
+                    }
+                    throw new NoteNotFoundException(400, "not found");
+                }
+            }
+        }
+        throw new NoteNotFoundException(400, "Invalid email ");
+    }
+
+    @Override
+    public NoteModel setRemainder(String remainderTime, String token, Long id) {
+        boolean isUserPresent = restTemplate.getForObject("http://USER-SERVICE:8091/user/validate/" + token, Boolean.class);
+        if (isUserPresent){
+            Optional<NoteModel> isNotesPresent = noteRepository.findById(id);
+            if (isNotesPresent.isPresent()){
+                LocalDate today = LocalDate.now();
+                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-mm-yyyy HH:mm:ss");
+                LocalDate remainder = LocalDate.parse(remainderTime, dateTimeFormatter);
+                if (remainder.isBefore(today)){
+                    throw new NoteNotFoundException(400, "Invalid remainder time");
+                }
+                isNotesPresent.get().setRemindertime(remainderTime);
+                noteRepository.save(isNotesPresent.get());
+                return  isNotesPresent.get();
+            }
+            throw new NoteNotFoundException(400, "notes not present");
+        }
+        throw new NoteNotFoundException(400, "Token is wrong");
+    }
+
 
 
 }

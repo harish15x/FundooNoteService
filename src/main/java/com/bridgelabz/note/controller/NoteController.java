@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -25,7 +24,7 @@ public class NoteController {
         return new ResponseEntity<>(responseClass, HttpStatus.OK);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/update/{noteId}")
     public ResponseEntity<ResponseClass> updateNote(@RequestHeader String token, @PathVariable NoteDTO noteDTO, @PathVariable Long noteId) {
         ResponseClass responseClass = noteService.updateNote(token, noteDTO, noteId);
         return new ResponseEntity<>(responseClass, HttpStatus.OK);
@@ -43,7 +42,7 @@ public class NoteController {
         return new ResponseEntity<>(responseClass, HttpStatus.OK);
     }
 
-    @GetMapping("/readnotesbyid/{id}")
+    @GetMapping("/readnotesbyid/{noteId}")
     public ResponseEntity<ResponseClass> readNotesById(@RequestHeader String token, @PathVariable long noteId) {
         ResponseClass responseClass = noteService.readNotesById(token, noteId);
         return new ResponseEntity<>(responseClass, HttpStatus.OK);
@@ -62,17 +61,32 @@ public class NoteController {
 
     }
 
-    @PutMapping("pin/{id}")
+    @PutMapping("pin/{noteId}")
     public ResponseEntity<ResponseClass> pinId(@PathVariable long noteId, @RequestHeader String token){
         ResponseClass responseClass = noteService.pin(noteId, token);
         return new ResponseEntity<>(responseClass, HttpStatus.OK);
     }
 
-    @PutMapping("/archive/{id}")
+    @PutMapping("/archive/{noteId}")
     public ResponseEntity<ResponseClass> archiveNote(@PathVariable long noteId, @RequestHeader String token){
         ResponseClass responseClass = noteService.archiveNote(noteId, token);
         return new ResponseEntity<>(responseClass, HttpStatus.OK);
     }
+
+    @PostMapping("/addcollabrators")
+    public ResponseEntity<ResponseClass> addCollabrators(@RequestParam Long noteId, @RequestParam String emailId, @RequestHeader String collabrators, String token, Long collabratorUserId ) {
+        ResponseClass responseClass = noteService.addCollabrator(noteId, emailId, collabrators, token, collabratorUserId);
+        return new ResponseEntity<>(responseClass, HttpStatus.OK);
+    }
+
+    @PostMapping("/setremainder/{id}")
+    ResponseEntity<ResponseClass> setRemainder(@RequestHeader String token, @PathVariable Long id, @RequestParam String remainderTime){
+        NoteModel noteModel = noteService.setRemainder(remainderTime, token, id);
+        ResponseClass responseClass = new ResponseClass(400, "Remainder set successfully", noteModel);
+        return new ResponseEntity<>(responseClass, HttpStatus.OK);
+    }
+
+
 
 
 

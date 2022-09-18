@@ -8,10 +8,4 @@ import java.time.LocalDateTime;
 public class LableDTO {
 
     private String labelName;
-    private Long userId;
-    private Long noteId;
-    private String emailId;
-    private LocalDateTime registerDate;
-    private LocalDateTime updateDate;
-
 }

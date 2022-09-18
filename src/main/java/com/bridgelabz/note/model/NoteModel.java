@@ -1,10 +1,13 @@
 package com.bridgelabz.note.model;
 
 import com.bridgelabz.note.dto.NoteDTO;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -24,7 +27,19 @@ public class NoteModel {
     private boolean isArchieve;
     private LocalDateTime registerDate;
     private LocalDateTime updateDate;
-    private LocalDateTime remindertime;
+    private String remindertime;
+
+    @ElementCollection(targetClass = String.class)
+    private List<String> collabrators;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "labelNote", joinColumns = {@JoinColumn(name = "noteId")},inverseJoinColumns = {@JoinColumn(name = "labelId")})
+    @JsonBackReference
+    @JsonIgnore
+    private List<LableModel> list;
+
+
+
 
     public NoteModel(NoteDTO noteDTO){
 

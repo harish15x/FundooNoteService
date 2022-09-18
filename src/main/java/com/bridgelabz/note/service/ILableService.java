@@ -15,4 +15,8 @@ public interface ILableService {
    List<LableModel> getLableData(String token);
 
     ResponseClass deleteLable(String token, long lableId);
+
+    ResponseClass addLabel(long labelId, String token, List<Long> noteId);
+
+
 }

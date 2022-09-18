@@ -24,7 +24,7 @@ public class LabelController {
         return new ResponseEntity<>(responseClass, HttpStatus.OK);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/update/{noteId}")
     public ResponseEntity<ResponseClass> updateLable(@RequestHeader String token, @PathVariable long lableId, @PathVariable LableDTO lableDTO){
         ResponseClass responseClass = lableService.updateLable(token, lableId, lableDTO);
         return new ResponseEntity<>(responseClass, HttpStatus.OK);
@@ -41,5 +41,13 @@ public class LabelController {
         ResponseClass responseClass = lableService.deleteLable(token, lableId);
         return new ResponseEntity<>(responseClass, HttpStatus.OK);
     }
+
+    @PostMapping("/addlabel")
+    public ResponseEntity<ResponseClass> addLabel(@RequestParam long labelId, @RequestHeader String token, List<Long> noteId){
+        ResponseClass responseClass = lableService.addLabel(labelId, token, noteId);
+        return new ResponseEntity<>(responseClass, HttpStatus.OK);
+    }
+
+
 
 }
